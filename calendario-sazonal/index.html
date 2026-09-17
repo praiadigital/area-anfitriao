@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendário Sazonal de Preços — Praia Digital</title>
+<meta name="description" content="Quando subir ou baixar sua diária de temporada no litoral paulista, mês a mês.">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
+  body{background:#f0f9ff;color:#0f172a;min-height:100vh}
+  header{background:linear-gradient(135deg,#0077B6,#00B4D8);color:#fff;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+  header a{color:#fff;text-decoration:none;font-weight:700}.logo{font-size:1.2rem}
+  main{max-width:760px;margin:2rem auto;padding:0 1rem}
+  .card{background:#fff;border-radius:16px;padding:1.75rem;box-shadow:0 4px 24px rgba(0,60,100,.08)}
+  h1{font-size:1.5rem;color:#0077B6}.sub{color:#64748b;margin:.3rem 0 1.25rem;font-size:.95rem}
+  label{font-weight:600;font-size:.85rem;display:block;margin-bottom:.3rem}
+  input{width:100%;padding:.7rem;border:1px solid #cbd5e1;border-radius:10px;font-size:1rem}
+  .meses{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.6rem;margin-top:1.25rem}
+  .mes{border-radius:12px;padding:.8rem;font-size:.85rem}
+  .mes b{display:block;font-size:.95rem}
+  .alta{background:#fee2e2;color:#991b1b}.media{background:#fef9c3;color:#854d0e}.baixa{background:#dcfce7;color:#166534}
+  .dica{margin-top:1rem;background:#ecfeff;border:1px solid #67e8f9;border-radius:12px;padding:1rem;font-size:.9rem}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="https://praia.digital/">🏖️ Praia Digital</a>
+  <a href="https://praia.digital/area-anfitriao">← Área do Anfitrião</a>
+</header>
+<main>
+  <div class="card">
+    <h1>📅 Calendário Sazonal de Preços</h1>
+    <p class="sub">Informe sua diária base e veja a sugestão de preço para cada mês no litoral paulista.</p>
+    <label>Sua diária média atual (R$)</label>
+    <input type="number" id="diaria" value="420" oninput="render()">
+    <div class="meses" id="meses"></div>
+    <div class="dica">💡 <b>Estratégia:</b> na alta temporada, aumente a diária e exija mínimo de noites. Na baixa, use descontos semanais e foque em estadias longas de home-office. <a href="https://praia.digital/ferramentas" style="color:#0077B6;font-weight:700">Calcule sua receita no Kit do Anfitrião →</a></div>
+  </div>
+</main>
+<script>
+var dados=[
+  ['Janeiro','alta',1.9,'Férias escolares — pico máximo'],
+  ['Fevereiro','alta',1.6,'Carnaval e verão'],
+  ['Março','media',1.1,'Demanda em queda pós-verão'],
+  ['Abril','media',1.0,'Feriados pontuam fins de semana'],
+  ['Maio','baixa',0.85,'Foquem estadias longas'],
+  ['Junho','baixa',0.85,'Férias de inverno leves'],
+  ['Julho','media',1.15,'Férias escolares de inverno'],
+  ['Agosto','baixa',0.9,'Mês mais fraco do ano'],
+  ['Setembro','baixa',0.9,'Primavera começa a aquecer'],
+  ['Outubro','media',1.05,'Feriados + clima melhorando'],
+  ['Novembro','media',1.1,'Pré-temporada'],
+  ['Dezembro','alta',1.8,'Réveillon — segunda maior demanda']
+];
+function render(){
+  var base=parseFloat(document.getElementById('diaria').value)||0;
+  document.getElementById('meses').innerHTML=dados.map(function(m){
+    var v=Math.round(base*m[2]);
+    return '<div class="mes '+m[1]+'"><b>'+m[0]+'</b>R$ '+v.toLocaleString('pt-BR')+'/noite<br><small>'+m[3]+'</small></div>';
+  }).join('');
+}
+render();
+</script>
+</body>
+</html>
