@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Central de Mensagens do Anfitrião — Praia Digital</title>
+<meta name="description" content="Todas as mensagens da jornada do hóspede: reserva, check-in, estadia, checkout e avaliação.">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
+  body{background:#f0f9ff;color:#0f172a;min-height:100vh}
+  header{background:linear-gradient(135deg,#0077B6,#00B4D8);color:#fff;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+  header a{color:#fff;text-decoration:none;font-weight:700}.logo{font-size:1.2rem}
+  main{max-width:680px;margin:2rem auto;padding:0 1rem}
+  .card{background:#fff;border-radius:16px;padding:1.75rem;box-shadow:0 4px 24px rgba(0,60,100,.08)}
+  h1{font-size:1.5rem;color:#0077B6}.sub{color:#64748b;margin:.3rem 0 1.2rem;font-size:.95rem}
+  label{display:block;font-weight:600;font-size:.85rem;margin:.9rem 0 .3rem}
+  input,select{width:100%;padding:.7rem;border:1px solid #cbd5e1;border-radius:10px;font-size:1rem}
+  .msg{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:1rem;margin-top:.7rem;font-size:.9rem;line-height:1.6;white-space:pre-wrap}
+  .msg b{color:#0077B6}
+  .cp{float:right;border:1px solid #0077B6;color:#0077B6;background:#fff;border-radius:8px;padding:.25rem .7rem;font-size:.75rem;font-weight:700;cursor:pointer}
+  .dica{margin-top:1.2rem;background:#ecfeff;border:1px solid #67e8f9;border-radius:12px;padding:1rem;font-size:.9rem}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="https://praia.digital/">🏖️ Praia Digital</a>
+  <a href="https://praia.digital/area-anfitriao">← Área do Anfitrião</a>
+</header>
+<main>
+  <div class="card">
+    <h1>💬 Central de Mensagens</h1>
+    <p class="sub">Personalize uma vez, use em todas as reservas. As 5 mensagens essenciais da jornada:</p>
+    <label>Nome do hóspede</label><input id="h" value="Carlos" oninput="render()">
+    <label>Nome do imóvel</label><input id="i" value="Apto Vista Mar — Praia Grande" oninput="render()">
+    <label>Datas da reserva</label><input id="d" value="20 a 27 de dezembro" oninput="render()">
+    <div id="lista"></div>
+    <div class="dica">📋 Regras da casa no <a href="https://praia.digital/ferramentas/regras-da-casa/" style="color:#0077B6;font-weight:700">Gerador de Regras</a> · ⭐ Pedido de avaliação no <a href="https://praia.digital/area-anfitriao/pedido-avaliacao/" style="color:#0077B6;font-weight:700">Impulsionador</a></div>
+  </div>
+</main>
+<script>
+function render(){
+  var h=document.getElementById('h').value, i=document.getElementById('i').value, d=document.getElementById('d').value;
+  var msgs=[
+    ['✅ Confirmação de reserva','Olá, '+h+'! Reserva confirmada para '+d+' no '+i+'. 🎉\n\nNos próximos dias envio as instruções de check-in. Qualquer dúvida, estou por aqui!'],
+    ['🔑 Instruções de check-in','Oi, '+h+'! Amanhã é seu check-in no '+i+'!\n\n📍 Endereço e acesso: [enviar no dia]\n🔑 O acesso é autônomo — você recebe o código 2h antes.\n\nBoa viagem! 🌊'],
+    ['🌊 Durante a estadia','Oi, '+h+'! Tudo certo por aí?\n\nSe precisar de qualquer coisa — dicas de praia, restaurantes ou algo no imóvel — é só chamar. Aproveite!'],
+    ['👋 Checkout','Bom dia, '+h+'! Checkout hoje até 11h.\n\nAntes de sair: feche as janelas, desligue o ar e deixe as chaves no local combinado. Obrigado pela estadia!'],
+    ['⭐ Pós-estadia',h+', foi um prazer recebê-lo(a)!\n\nSe puder deixar sua avaliação, ajuda muito. E volte sempre — hóspedes que retornam têm condições especiais. 😊']
+  ];
+  document.getElementById('lista').innerHTML=msgs.map(function(m,idx){
+    return '<div class="msg" id="m'+idx+'"><button class="cp" onclick="navigator.clipboard.writeText(document.getElementById(\'m'+idx+'\').innerText);this.textContent=\'✓\'">Copiar</button><b>'+m[0]+'</b>\n\n'+m[1]+'</div>';
+  }).join('');
+}
+render();
+</script>
+</body>
+</html>
