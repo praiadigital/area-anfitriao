@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preço Mínimo de Diária — Praia Digital</title>
+<meta name="description" content="Abaixo de qual preço sua diária vira prejuízo? Calcule seu piso de temporada.">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
+  body{background:#f0f9ff;color:#0f172a;min-height:100vh}
+  header{background:linear-gradient(135deg,#0077B6,#00B4D8);color:#fff;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+  header a{color:#fff;text-decoration:none;font-weight:700}.logo{font-size:1.2rem}
+  main{max-width:660px;margin:2rem auto;padding:0 1rem}
+  .card{background:#fff;border-radius:16px;padding:1.75rem;box-shadow:0 4px 24px rgba(0,60,100,.08)}
+  h1{font-size:1.5rem;color:#0077B6}.sub{color:#64748b;margin:.3rem 0 1.2rem;font-size:.95rem}
+  label{display:block;font-weight:600;font-size:.85rem;margin:.9rem 0 .3rem}
+  input{width:100%;padding:.7rem;border:1px solid #cbd5e1;border-radius:10px;font-size:1rem}
+  button{width:100%;margin-top:1.3rem;padding:.9rem;border:0;border-radius:12px;background:#0077B6;color:#fff;font-weight:800;font-size:1rem;cursor:pointer}
+  #out{display:none;margin-top:1.3rem}
+  .linha{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid #e2e8f0;font-size:.93rem}
+  .destaque{background:#fee2e2;border:1px solid #fca5a5;border-radius:12px;padding:1.1rem;margin-top:.8rem;text-align:center}
+  .destaque b{font-size:1.6rem;color:#b91c1c;display:block}
+  .ok{background:#dcfce7;border-color:#86efac}.ok b{color:#166534}
+  .dica{margin-top:1rem;background:#ecfeff;border:1px solid #67e8f9;border-radius:12px;padding:1rem;font-size:.9rem}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="https://praia.digital/">🏖️ Praia Digital</a>
+  <a href="https://praia.digital/area-anfitriao">← Área do Anfitrião</a>
+</header>
+<main>
+  <div class="card">
+    <h1>⛔ Piso de Diária</h1>
+    <p class="sub">Aceitar reserva barata demais custa mais caro que ficar vazio. Calcule seu preço mínimo.</p>
+    <label>Custos fixos mensais (condomínio, IPTU, energia base) R$</label><input type="number" id="fixos" value="900">
+    <label>Custo por estadia (limpeza, lavanderia, amenities) R$</label><input type="number" id="estadia" value="150">
+    <label>Custo por diária (energia extra, água, desgaste) R$</label><input type="number" id="dia" value="35">
+    <label>Estadia média das suas reservas (noites)</label><input type="number" id="noites" value="3">
+    <button onclick="calc()">Calcular meu piso</button>
+    <div id="out"></div>
+    <div class="dica">💹 Defina o preço cheio no <a href="https://praia.digital/area-anfitriao/precificador-dinamico/" style="color:#0077B6;font-weight:700">Precificador Dinâmico</a> · 📅 <a href="https://praia.digital/area-anfitriao/calendario-sazonal/" style="color:#0077B6;font-weight:700">Calendário Sazonal</a></div>
+  </div>
+</main>
+<script>
+var fmt=function(n){return n.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0})};
+function calc(){
+  var f=parseFloat(document.getElementById('fixos').value)||0;
+  var e=parseFloat(document.getElementById('estadia').value)||0;
+  var d=parseFloat(document.getElementById('dia').value)||0;
+  var n=parseFloat(document.getElementById('noites').value)||1;
+  // piso: cobre custo por dia + parcela do custo de estadia + parcela dos fixos (ocupacao 50% base)
+  var ocupacaoBase=0.5;
+  var fixoPorDiaOcupado=f/(30*ocupacaoBase);
+  var piso=(d + e/n + fixoPorDiaOcupado)/0.85; // divide por 0.85 p/ cobrir taxa da plataforma
+  piso=Math.ceil(piso/5)*5;
+  document.getElementById('out').innerHTML=
+    '<div class="linha"><span>Custo por diária ocupada</span><b>'+fmt(d+fixoPorDiaOcupado)+'</b></div>'+
+    '<div class="linha"><span>Custo de estadia diluído ('+n+' noites)</span><b>'+fmt(e/n)+'</b></div>'+
+    '<div class="linha"><span>Taxa da plataforma (~15%)</span><b>incluída no piso</b></div>'+
+    '<div class="destaque">Nunca aceite menos que<b>'+fmt(piso)+'/noite</b><small>Abaixo disso você paga para hospedar. Na baixa temporada, prefira descontos para estadias longas.</small></div>';
+  document.getElementById('out').style.display='block';
+}
+</script>
+</body>
+</html>
