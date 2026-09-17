@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Precificador Dinâmico de Temporada — Praia Digital</title>
+<meta name="description" content="Defina o preço ideal da sua diária considerando temporada, fim de semana, feriados e antecedência da reserva.">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
+  body{background:#f0f9ff;color:#0f172a;min-height:100vh}
+  header{background:linear-gradient(135deg,#0077B6,#00B4D8);color:#fff;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+  header a{color:#fff;text-decoration:none;font-weight:700}.logo{font-size:1.2rem}
+  main{max-width:700px;margin:2rem auto;padding:0 1rem}
+  .card{background:#fff;border-radius:16px;padding:1.75rem;box-shadow:0 4px 24px rgba(0,60,100,.08)}
+  h1{font-size:1.5rem;color:#0077B6}.sub{color:#64748b;margin:.3rem 0 1.2rem;font-size:.95rem}
+  label{display:block;font-weight:600;font-size:.85rem;margin:.9rem 0 .3rem}
+  input,select{width:100%;padding:.7rem;border:1px solid #cbd5e1;border-radius:10px;font-size:1rem}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:0 1rem}
+  @media(max-width:600px){.grid{grid-template-columns:1fr}}
+  button{width:100%;margin-top:1.3rem;padding:.9rem;border:0;border-radius:12px;background:#0077B6;color:#fff;font-weight:800;font-size:1rem;cursor:pointer}
+  #out{display:none;margin-top:1.3rem}
+  .linha{display:flex;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid #e2e8f0;font-size:.95rem}
+  .linha b{color:#0077B6}
+  .final{font-size:1.3rem;color:#0369a1;border:0;padding-top:.8rem}
+  .dica{margin-top:1rem;background:#ecfeff;border:1px solid #67e8f9;border-radius:12px;padding:1rem;font-size:.9rem}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="https://praia.digital/">🏖️ Praia Digital</a>
+  <a href="https://praia.digital/area-anfitriao">← Área do Anfitrião</a>
+</header>
+<main>
+  <div class="card">
+    <h1>💹 Precificador Dinâmico</h1>
+    <p class="sub">Descubra quanto cobrar na diária considerando todos os fatores de demanda.</p>
+    <label>Diária base (R$)</label>
+    <input type="number" id="base" value="420">
+    <div class="grid">
+      <div><label>Período</label>
+        <select id="periodo"><option value="1.8">Alta temporada (dez–fev)</option><option value="1.1">Meia temporada</option><option value="0.85">Baixa temporada</option></select></div>
+      <div><label>Dia da semana</label>
+        <select id="dia"><option value="1.25">Fim de semana</option><option value="1">Dia útil</option></select></div>
+      <div><label>Feriado/prolongado?</label>
+        <select id="feriado"><option value="1.35">Sim</option><option value="1" selected>Não</option></select></div>
+      <div><label>Antecedência da reserva</label>
+        <select id="ant"><option value="0.9">Última hora (-10% p/ preencher)</option><option value="1" selected>Normal</option><option value="1.05">Com 60+ dias (+5%)</option></select></div>
+    </div>
+    <label>Estadia mínima (noites)</label>
+    <input type="number" id="noites" value="2" min="1">
+    <button onclick="calc()">Calcular preço ideal</button>
+    <div id="out"></div>
+    <div class="dica">📅 Combine com o <a href="https://praia.digital/area-anfitriao/calendario-sazonal/" style="color:#0077B6;font-weight:700">Calendário Sazonal</a> e calcule a receita no <a href="https://praia.digital/ferramentas" style="color:#0077B6;font-weight:700">Kit do Anfitrião</a>.</div>
+  </div>
+</main>
+<script>
+var fmt=function(n){return n.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0})};
+function calc(){
+  var b=parseFloat(document.getElementById('base').value)||0;
+  var m=1;
+  ['periodo','dia','feriado','ant'].forEach(function(id){m*=parseFloat(document.getElementById(id).value)});
+  var diaria=Math.round(b*m/5)*5;
+  var n=parseInt(document.getElementById('noites').value)||1;
+  document.getElementById('out').innerHTML=
+    '<div class="linha"><span>Diária base</span><b>'+fmt(b)+'</b></div>'+
+    '<div class="linha"><span>Multiplicador combinado</span><b>'+m.toFixed(2)+'x</b></div>'+
+    '<div class="linha final"><span>Diária recomendada</span><b>'+fmt(diaria)+'</b></div>'+
+    '<div class="linha"><span>Reserva de '+n+' noites</span><b>'+fmt(diaria*n)+'</b></div>';
+  document.getElementById('out').style.display='block';
+}
+</script>
+</body>
+</html>
